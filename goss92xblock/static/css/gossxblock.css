@@ -1,0 +1,23 @@
+.gossxblock_block .score {
+    font-weight: bold;
+    font-size: 20pt;
+}
+
+#gossinput {
+    width: 300px;
+    	
+}
+
+#gosscurrent {
+	background: yellow;
+}
+
+#gosscorrect {
+	background: lime!important;
+}
+
+
+.gossxblock_block p {
+    cursor: pointer;
+    background: silver!important;
+}
