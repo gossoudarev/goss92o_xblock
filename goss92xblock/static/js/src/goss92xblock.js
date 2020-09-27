@@ -1,7 +1,7 @@
 /* Javascript for goss8XBlock. */
 function Goss92XBlock(runtime, element) {
 
-    function updateScore(result) {
+    window.updateScore = function (result) {
         $('.score', element).text(result.score);
     }
 
