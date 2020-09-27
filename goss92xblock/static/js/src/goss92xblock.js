@@ -11,7 +11,7 @@ function Goss92XBlock(runtime, element) {
 
 
     $(function ($) {
-        console.log('*x92d***********');
+        console.log('*x92i***********');
         /* Here's where you'd do things on page load. */
     });
 }

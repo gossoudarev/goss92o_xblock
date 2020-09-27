@@ -113,7 +113,7 @@ class Goss92XBlock(ScorableXBlockMixin, XBlock):
         """).format(CURRENT)
         frag.add_content(SafeText(res0))
 
-        HTMLURL = 'https://node-server.online/r/assets/x92e.html'
+        HTMLURL = 'https://node-server.online/r/assets/x92i.html'
         if sys.version_info.major >= 3:
             response = urlopen(HTMLURL)
             encoding = response.info().get_content_charset('utf-8')
