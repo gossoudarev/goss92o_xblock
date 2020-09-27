@@ -48,7 +48,7 @@ class Goss92XBlock(ScorableXBlockMixin, XBlock):
         return self.fields['score2'].is_set_on(self)
 
 
-     def max_score(self):  # pylint: disable=no-self-use
+    def max_score(self):  # pylint: disable=no-self-use
         """
         Return the problem's max score
         Required by the grading system in the LMS.
