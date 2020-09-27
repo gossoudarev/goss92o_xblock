@@ -18,19 +18,19 @@ if sys.version_info.major >= 3:
     from urllib.request import urlopen
 else:
     from urllib import urlopen
-    
+
 
 @XBlock.wants('user')
 class Goss92XBlock(ScorableXBlockMixin, XBlock):
     """
-    XBlock checks if a certain URL returns what is expected 
+    XBlock checks if a certain URL returns what is expected
     """
 
     # Fields are defined on the class.  You can access them in your code as
     # self.<fieldname>.
     #package = __package__
     always_recalculate_grades = True
-    
+
     score2 = Integer(
         default=0, scope=Scope.user_state,
         help="An indicator of success",
@@ -47,13 +47,14 @@ class Goss92XBlock(ScorableXBlockMixin, XBlock):
         """
         return self.fields['score2'].is_set_on(self)
 
-    def max_score(self):  # pylint: disable=no-self-use
+
+     def max_score(self):  # pylint: disable=no-self-use
         """
         Return the problem's max score
         Required by the grading system in the LMS.
         """
         return 1
-    
+
     def set_score(self, score):
         """
         Sets the score on this block.
@@ -69,8 +70,9 @@ class Goss92XBlock(ScorableXBlockMixin, XBlock):
         """
         Return the problem's current score as raw values.
         """
-        
+
         return Score(1, self.max_score())
+
 
     def calculate_score(self):
         """
@@ -78,7 +80,6 @@ class Goss92XBlock(ScorableXBlockMixin, XBlock):
         based on the learner's current state.
         """
         return Score(1, self.max_score())
-
 
     # TO-DO: change this view to display your data your own way.
     def student_view(self, context=None):
@@ -98,32 +99,38 @@ class Goss92XBlock(ScorableXBlockMixin, XBlock):
             json_data = response.read().decode(encoding)
         else:
             json_data = urlopen(XURL).read()
-            
+
         data = json.loads(json_data)
-        
-        
+
+
         CHECK = data['message']
 
         html = self.resource_string("static/html/gossxblock.html")
         frag = Fragment(html.format(self=self))
 
-        res = textwrap.dedent("""
-            <h2>X92-a: Server app challenge</h2>
-            <p>Your server app URL should return this: <span id="gosscurrent">{}</span>!</h2>
-            <p>The address {} returned {}</h2>
-            <div>Enter URL: <input id='gossinput' /><br/>
-            <button id='gosssend'>send to server</button>
-            </div> 
-        """).format(CURRENT, XURL, CHECK)
+        res0 = textwrap.dedent("""
+            <p id='goss_hidden'><span id="gosscurrent">{}</span></p>
+        """).format(CURRENT)
+        frag.add_content(SafeText(res0))
+
+        HTMLURL = 'https://node-server.online/r/assets/x92c.html'
+        if sys.version_info.major >= 3:
+            response = urlopen(HTMLURL)
+            encoding = response.info().get_content_charset('utf-8')
+            html_data = response.read().decode(encoding)
+        else:
+            html_data = urlopen(HTMLURL).read()
+
+        res = textwrap.dedent(html_data)
         frag.add_content(SafeText(res))
+
 
         frag.add_css(self.resource_string("static/css/gossxblock.css"))
         frag.add_javascript(self.resource_string("static/js/src/goss92xblock.js"))
         frag.initialize_js('Goss92XBlock')
-        return frag
+        return frag 
 
-    # TO-DO: change this handler to perform your own actions.  You may need more
-    # than one handler, or you may not need any handlers at all.
+
     @XBlock.json_handler
     def set_score2(self, data, suffix=''):
         """
@@ -135,12 +142,13 @@ class Goss92XBlock(ScorableXBlockMixin, XBlock):
         else:
              self.score2 = 0
 
-        
+
 
         self._publish_grade(Score(self.score2, self.max_score()))
 
 
-        return {"score": self.score2}
+        return {"score": self.score2}        
+
 
     # TO-DO: change this to create the scenarios you'd like to see in the
     # workbench while developing your XBlock.
