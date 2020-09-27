@@ -7,7 +7,7 @@ function Goss92XBlock(runtime, element) {
 
     var handlerUrl = runtime.handlerUrl(element, 'set_score2');
 
-    $('#gosssend').click(button);
+    $('#gosssend').click(buttonClick);
 
 
     $(function ($) {
