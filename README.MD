@@ -1,4 +1,4 @@
-# Это пример XBlock для  Python3 / Tutur 16
+# Это пример XBlock для  Python3 / Tutor 16
 # старый вариант goss92jxblock-master-2022.zip для Tutor 12
  
 
