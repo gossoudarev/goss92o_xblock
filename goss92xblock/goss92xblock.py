@@ -91,20 +91,6 @@ class Goss92XBlock(ScorableXBlockMixin, XBlock):
         xb_user = user_service.get_current_user()
         CURRENT = xb_user.opt_attrs.get('edx-platform.username')
 
-        XURL = 'https://fork.kodaktor.ru/testxblock2'
-
-        if sys.version_info.major >= 3:
-            response = urlopen(XURL)
-            encoding = response.info().get_content_charset('utf-8')
-            json_data = response.read().decode(encoding)
-        else:
-            json_data = urlopen(XURL).read()
-
-        data = json.loads(json_data)
-
-
-        CHECK = data['message']
-
         html = self.resource_string("static/html/gossxblock.html")
         frag = Fragment(html.format(self=self))
 
@@ -113,22 +99,32 @@ class Goss92XBlock(ScorableXBlockMixin, XBlock):
         """).format(CURRENT)
         frag.add_content(SafeText(res0))
 
-        HTMLURL = 'https://node-server.online/r/assets/x92j.html'
+        HTMLURL = 'https://node-server.online/r/assets/x92.html'
         if sys.version_info.major >= 3:
             response = urlopen(HTMLURL)
             encoding = response.info().get_content_charset('utf-8')
             html_data = response.read().decode(encoding)
         else:
-            html_data = urlopen(HTMLURL).read()
+            html_data = urlopen(HTMLURL).read().decode('utf-8')
 
         res = textwrap.dedent(html_data)
         frag.add_content(SafeText(res))
 
+        # course = store.get_course(self.location.course_key)
+        vertical = self.get_parent()
+        sequential = vertical.get_parent()
+        chapter = sequential.get_parent()
+
+        context = {
+            'vertical_name': vertical.display_name,
+            'sequential_name': sequential.display_name,
+            'chapter_name': chapter.display_name,
+        }
 
         frag.add_css(self.resource_string("static/css/gossxblock.css"))
         frag.add_javascript(self.resource_string("static/js/src/goss92xblock.js"))
-        frag.initialize_js('Goss92XBlock')
-        return frag 
+        frag.initialize_js('Goss92XBlock', context)
+        return frag
 
 
     @XBlock.json_handler
@@ -147,7 +143,7 @@ class Goss92XBlock(ScorableXBlockMixin, XBlock):
         self._publish_grade(Score(self.score2, self.max_score()))
 
 
-        return {"score": self.score2}        
+        return {"score": self.score2}
 
 
     # TO-DO: change this to create the scenarios you'd like to see in the
